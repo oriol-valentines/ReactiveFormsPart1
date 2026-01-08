@@ -1,0 +1,99 @@
+/* ESTILO GENERAL */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* TITULOS */
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+/* FORMULARIO */
+form {
+  max-width: 900px;
+}
+
+/* SECCIONES */
+section {
+  margin-bottom: 25px;
+}
+
+/* LABELS */
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* INPUTS Y SELECTS */
+input,
+select {
+  width: 250px;
+  padding: 6px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+/* INPUT DATE Y NUMBER UN POCO MAS PEQUEÑOS */
+input[type="date"],
+input[type="number"] {
+  width: 180px;
+}
+
+/* RADIO Y CHECKBOX */
+input[type="radio"],
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 6px;
+  margin-top: 10px;
+}
+
+/* LINEA DE RADIOS */
+div {
+  margin-bottom: 10px;
+}
+
+/* ERRORES */
+.error {
+  color: #c0392b;
+  font-size: 13px;
+  display: block;
+  margin-top: 3px;
+}
+
+/* VALIDACIONES */
+.valid {
+  border-color: #2ecc71;
+}
+
+.invalid {
+  border-color: #e74c3c;
+}
+
+/* BOTON */
+button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* BOTON DESHABILITADO */
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* HOVER */
+button:hover:not(:disabled) {
+  background-color: #2980b9;
+}

@@ -1,0 +1,243 @@
+<!-- TITULO PRINCIPAL DE LA PAGINA -->
+<h1>Reserva de Viatges</h1>
+
+<!-- FORMULARIO REACTIVO VINCULADO AL FORMGROUP -->
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+
+  <!-- ================= DADES DEL CLIENT ================= -->
+  <section>
+
+    <!-- SUBTITULO -->
+    <h2>Dades del Client</h2>
+
+    <!-- NOM COMPLET -->
+    <label for="name">Nom Complet</label>
+
+    <!-- INPUT DE TEXTO PARA EL NOMBRE COMPLETO -->
+    <input
+      id="name"
+      type="text"
+      formControlName="fullName"
+      [ngClass]="{
+        'valid': bookingForm.get('fullName')?.valid && bookingForm.get('fullName')?.touched,
+        'invalid': isFieldInvalid('fullName')
+      }"
+    >
+
+    <!-- MENSAJE DE ERROR SI EL CAMPO ES INVALIDO -->
+    @if (isFieldInvalid('fullName')) {
+      <span class="error">{{ getErrorMessage('fullName') }}</span>
+    }
+
+    <!-- DNI / NIE -->
+    <label for="dni">DNI / NIE</label>
+
+    <input
+      id="dni"
+      type="text"
+      formControlName="dni"
+      [ngClass]="{
+        'valid': bookingForm.get('dni')?.valid && bookingForm.get('dni')?.touched,
+        'invalid': isFieldInvalid('dni')
+      }"
+    >
+
+    @if (isFieldInvalid('dni')) {
+      <span class="error">{{ getErrorMessage('dni') }}</span>
+    }
+
+    <!-- EMAIL -->
+    <label for="email">Email</label>
+
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+      [ngClass]="{
+        'valid': bookingForm.get('email')?.valid && bookingForm.get('email')?.touched,
+        'invalid': isFieldInvalid('email')
+      }"
+    >
+
+    @if (isFieldInvalid('email')) {
+      <span class="error">{{ getErrorMessage('email') }}</span>
+    }
+
+    <!-- TELEFONO -->
+    <label for="phone">Telèfon</label>
+
+    <input
+      id="phone"
+      type="text"
+      formControlName="phone"
+      [ngClass]="{
+        'valid': bookingForm.get('phone')?.valid && bookingForm.get('phone')?.touched,
+        'invalid': isFieldInvalid('phone')
+      }"
+    >
+
+    @if (isFieldInvalid('phone')) {
+      <span class="error">{{ getErrorMessage('phone') }}</span>
+    }
+
+    <!-- FECHA DE NACIMIENTO -->
+    <label for="birth">Data de Naixement</label>
+
+    <input
+      id="birth"
+      type="date"
+      formControlName="birthDate"
+      [ngClass]="{
+        'valid': bookingForm.get('birthDate')?.valid && bookingForm.get('birthDate')?.touched,
+        'invalid': isFieldInvalid('birthDate')
+      }"
+    >
+
+    @if (isFieldInvalid('birthDate')) {
+      <span class="error">{{ getErrorMessage('birthDate') }}</span>
+    }
+
+  </section>
+
+  <!-- ================= INFORMACIO DEL VIATGE ================= -->
+  <section>
+
+    <h2>Informació del Viatge</h2>
+
+    <!-- DESTINACION -->
+    <label>Destinació</label>
+
+    <select
+      formControlName="destination"
+      [ngClass]="{
+        'valid': bookingForm.get('destination')?.valid && bookingForm.get('destination')?.touched,
+        'invalid': isFieldInvalid('destination')
+      }"
+    >
+      <!-- OPCION POR DEFECTO -->
+      <option value="">Selecciona una destinació</option>
+
+      <!-- LISTA DE DESTINACIONES -->
+      @for (d of destinations; track d) {
+        <option [value]="d">{{ d }}</option>
+      }
+    </select>
+
+    @if (isFieldInvalid('destination')) {
+      <span class="error">{{ getErrorMessage('destination') }}</span>
+    }
+
+    <!-- FECHA DE SALIDA -->
+    <label>Data de Sortida</label>
+
+    <input
+      type="date"
+      formControlName="departureDate"
+      [ngClass]="{
+        'valid': bookingForm.get('departureDate')?.valid && bookingForm.get('departureDate')?.touched,
+        'invalid': isFieldInvalid('departureDate')
+      }"
+    >
+
+    @if (isFieldInvalid('departureDate')) {
+      <span class="error">{{ getErrorMessage('departureDate') }}</span>
+    }
+
+    <!-- FECHA DE REGRESO -->
+    <label>Data de Retorn</label>
+
+    <input
+      type="date"
+      formControlName="returnDate"
+      [ngClass]="{
+        'valid': bookingForm.get('returnDate')?.valid && bookingForm.get('returnDate')?.touched,
+        'invalid': isFieldInvalid('returnDate')
+      }"
+    >
+
+    @if (isFieldInvalid('returnDate')) {
+      <span class="error">{{ getErrorMessage('returnDate') }}</span>
+    }
+
+    <!-- TIPO DE VIAJE -->
+    <label>Tipus de Viatge</label>
+
+    <div>
+      <input type="radio" value="oneWay" formControlName="tripType">
+      Només anada
+
+      <input type="radio" value="roundTrip" formControlName="tripType">
+      Anada i tornada
+    </div>
+
+    @if (isFieldInvalid('tripType')) {
+      <span class="error">{{ getErrorMessage('tripType') }}</span>
+    }
+
+    <!-- CLASE -->
+    <label>Classe</label>
+
+    <select
+      formControlName="travelClass"
+      [ngClass]="{
+        'valid': bookingForm.get('travelClass')?.valid && bookingForm.get('travelClass')?.touched,
+        'invalid': isFieldInvalid('travelClass')
+      }"
+    >
+      <option value="">Selecciona classe</option>
+      <option>Turista</option>
+      <option>Business</option>
+      <option>Primera classe</option>
+    </select>
+
+    @if (isFieldInvalid('travelClass')) {
+      <span class="error">{{ getErrorMessage('travelClass') }}</span>
+    }
+
+    <!-- NUMERO DE PASAJEROS -->
+    <label>Nombre de Passatgers</label>
+
+    <input
+      type="number"
+      formControlName="passengers"
+      [ngClass]="{
+        'valid': bookingForm.get('passengers')?.valid && bookingForm.get('passengers')?.touched,
+        'invalid': isFieldInvalid('passengers')
+      }"
+    >
+
+    @if (isFieldInvalid('passengers')) {
+      <span class="error">{{ getErrorMessage('passengers') }}</span>
+    }
+
+  </section>
+
+  <!-- ================= CONDICIONS ================= -->
+  <section>
+
+    <h2>Condicions</h2>
+
+    <!-- CHECKBOX DE TERMINOS -->
+    <label>
+      <input type="checkbox" formControlName="terms">
+      Accepto termes i condicions
+    </label>
+
+    @if (isFieldInvalid('terms')) {
+      <span class="error">{{ getErrorMessage('terms') }}</span>
+    }
+
+    <!-- CHECKBOX DE NEWSLETTER -->
+    <label>
+      <input type="checkbox" formControlName="newsletter">
+      Vull rebre newsletter
+    </label>
+
+  </section>
+
+  <!-- BOTON DE ENVIO DESHABILITADO SI EL FORMULARIO NO ES VALIDO -->
+  <button type="submit" [disabled]="!bookingForm.valid">
+    Enviar Reserva
+  </button>
+
+</form>
