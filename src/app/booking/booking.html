@@ -1,6 +1,25 @@
 <!-- TITULO PRINCIPAL DE LA PAGINA -->
 <h1>Reserva de Viatges</h1>
 
+<!-- ================= FILTRO DE CERCA DE DESTINACIONS ================= -->
+<section>
+  <h2>Cerca de Destinacions</h2>
+  
+  <!-- CAMPO DE BUSQUEDA INDEPENDIENTE (NO ESTA EN EL FORMGROUP) -->
+  <label for="search">Filtrar destinacions</label>
+  <input
+    id="search"
+    type="text"
+    [formControl]="searchControl"
+    placeholder="Escriu per filtrar..."
+  >
+  
+  <!-- MENSAJE SI NO HAY RESULTADOS -->
+  @if (filteredDestinations.length === 0) {
+    <p class="no-results">No s'han trobat resultats</p>
+  }
+</section>
+
 <!-- FORMULARIO REACTIVO VINCULADO AL FORMGROUP -->
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
@@ -46,7 +65,7 @@
       <span class="error">{{ getErrorMessage('dni') }}</span>
     }
 
-    <!-- EMAIL -->
+    <!-- EMAIL CON VALIDACION ASINCRONA -->
     <label for="email">Email</label>
 
     <input
@@ -58,6 +77,11 @@
         'invalid': isFieldInvalid('email')
       }"
     >
+
+    <!-- MENSAJE DE ESTADO: COMPROBANDO EMAIL -->
+    @if (emailValidating) {
+      <span class="validating">Comprovant...</span>
+    }
 
     @if (isFieldInvalid('email')) {
       <span class="error">{{ getErrorMessage('email') }}</span>
@@ -104,7 +128,7 @@
 
     <h2>Informació del Viatge</h2>
 
-    <!-- DESTINACION -->
+    <!-- DESTINACION CON FILTRO -->
     <label>Destinació</label>
 
     <select
@@ -117,8 +141,8 @@
       <!-- OPCION POR DEFECTO -->
       <option value="">Selecciona una destinació</option>
 
-      <!-- LISTA DE DESTINACIONES -->
-      @for (d of destinations; track d) {
+      <!-- LISTA DE DESTINACIONES FILTRADAS -->
+      @for (d of filteredDestinations; track d) {
         <option [value]="d">{{ d }}</option>
       }
     </select>
@@ -211,6 +235,55 @@
     }
 
   </section>
+
+  <!-- ================= PASSATGERS ADDICIONALS (FORMARRAY) ================= -->
+  @if (additionalPassengers.length > 0) {
+    <section>
+      <h2>Passatgers Addicionals</h2>
+
+      <!-- ITERAR SOBRE CADA PASSATGER EN EL FORMARRAY -->
+      @for (passenger of additionalPassengers.controls; track $index) {
+        <div class="passenger-group" [formGroup]="passenger">
+          <h3>Passatger {{ $index + 2 }}</h3>
+
+          <!-- NOMBRE DEL PASSATGER -->
+          <label>Nom</label>
+          <input type="text" formControlName="name">
+          @if (passenger.get('name')?.invalid && passenger.get('name')?.touched) {
+            <span class="error">Nom obligatori (mínim 3 caràcters)</span>
+          }
+
+          <!-- EDAD DEL PASSATGER -->
+          <label>Edat</label>
+          <input type="number" formControlName="age">
+          @if (passenger.get('age')?.invalid && passenger.get('age')?.touched) {
+            <span class="error">Edat obligatòria (0-120)</span>
+          }
+
+          <!-- RELACION CON EL TITULAR -->
+          <label>Relació amb el titular</label>
+          <select formControlName="relationship">
+            <option value="">Selecciona</option>
+            <option value="familia">Família</option>
+            <option value="amic">Amic/ga</option>
+            <option value="company">Company/a</option>
+            <option value="altre">Altre</option>
+          </select>
+          @if (passenger.get('relationship')?.invalid && passenger.get('relationship')?.touched) {
+            <span class="error">Relació obligatòria</span>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- ================= PREU TOTAL ================= -->
+  @if (totalPrice > 0) {
+    <section>
+      <h2>Preu Total</h2>
+      <p class="total-price">{{ totalPrice }}€</p>
+    </section>
+  }
 
   <!-- ================= CONDICIONS ================= -->
   <section>
