@@ -1,125 +1,42 @@
-<!-- ============================================ -->
-<!-- COMENTARIOS HTML: se escriben así -->
-<!-- No se muestran en el navegador -->
-<!-- ============================================ -->
-
-<!-- TÍTULO PRINCIPAL -->
-<!-- h1: header level 1 (título más grande) -->
 <h1>Reserva de Viatges</h1>
 
-<!-- ============================================ -->
-<!-- SECCIÓN: FILTRO DE BÚSQUEDA DE DESTINOS -->
-<!-- ============================================ -->
-
-<!-- section: elemento semántico que agrupa contenido relacionado -->
 <section>
   
-  <!-- h2: header level 2 (subtítulo) -->
   <h2>Cerca de Destinacions</h2>
-  
-  <!-- label: etiqueta descriptiva para un input -->
-  <!-- for="search": vincula el label con el input que tiene id="search" -->
+
   <label for="search">Filtrar destinacions</label>
-  
-  <!-- input: campo de entrada de texto -->
-   <!-- id: identificador único del elemento -->
 
-   <!-- type="text": campo de texto normal -->
-
-  <!-- [formControl]: binding de propiedad (property binding) -->
-    <!-- Los corchetes [] indican que estamos pasando una propiedad del componente -->
-    <!-- searchControl: el FormControl definido en el .ts -->
-    <!-- Vincula este input al FormControl independiente -->
-
-    <!-- placeholder: texto que se muestra cuando el campo está vacío -->
   <input id="search" type="text" [formControl]="searchControl" placeholder="Escriu per filtrar..." >
-  
-  <!-- ===== DIRECTIVA @if ===== -->
-  <!-- @if: sintaxis de Angular 17+ para condicionales -->
-  <!-- (antes se usaba *ngIf) -->
+
   @if (filteredDestinations.length === 0) {
-    <!-- Si el array filteredDestinations está vacío (length === 0) -->
-    
-    <!-- p: párrafo -->
-    <!-- class="no-results": clase CSS para estilar -->
     <p class="no-results">No s'han trobat resultats</p>
   }
-  <!-- Fin del @if -->
 
 </section>
 
-<!-- ============================================ -->
-<!-- FORMULARIO PRINCIPAL -->
-<!-- ============================================ -->
-
-<!-- form: elemento formulario HTML -->
- <!-- [formGroup]: directiva de Angular -->
-  <!-- Vincula este <form> con el FormGroup del componente -->
-  <!-- bookingForm: el FormGroup definido en el .ts -->
-   <!-- (ngSubmit): binding de evento (event binding) -->
-  <!-- Los paréntesis () indican que estamos escuchando un evento -->
-  <!-- ngSubmit: evento que se dispara al enviar el formulario -->
-  <!-- onSubmit(): método del componente que se ejecutará -->
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" >
-
-  <!-- ============================================ -->
-  <!-- SECCIÓN: DATOS DEL CLIENTE -->
-  <!-- ============================================ -->
 
   <section>
 
     <h2>Dades del Client</h2>
 
-    <!-- ===== CAMPO: NOMBRE COMPLETO ===== -->
-    
-    <!-- label: etiqueta del campo -->
-    <!-- for="name": vincula con input id="name" -->
     <label for="name">Nom Complet</label>
 
-    <!-- id: identificador único -->
-    <!-- formControlName: directiva de Angular -->
-    <!-- SIN corchetes porque es un string literal -->
-    <!-- "fullName": nombre del FormControl en bookingForm -->
-    <!-- Vincula este input con bookingForm.fullName -->
-     <!-- tipo de input: texto -->
-      <!-- [ngClass]: directiva para aplicar clases CSS dinámicamente -->
-        <!-- Los corchetes [] indican property binding -->
-        <!-- Recibe un objeto: { 'nombreClase': condición } -->
-         <!-- Clave: 'valid' (nombre de la clase CSS) -->
-        <!-- Valor: condición booleana -->
-        <!-- Si la condición es true, aplica la clase 'valid' -->
-        <!-- bookingForm.get('fullName'): obtener el FormControl -->
-        <!-- ?.valid: el control es válido -->
-        <!-- && : operador AND -->
-        <!-- ?.touched: el usuario ha tocado el campo -->
-         <!-- Si isFieldInvalid('fullName') devuelve true -->
-        <!-- Aplica la clase 'invalid' -->
     <input id="name" type="text" formControlName="fullName"
       [ngClass]="{
         'valid': bookingForm.get('fullName')?.valid && bookingForm.get('fullName')?.touched,
         'invalid': isFieldInvalid('fullName')
       }">
 
-    <!-- ===== DIRECTIVA @if PARA MOSTRAR ERRORES ===== -->
     @if (isFieldInvalid('fullName')) {
-      <!-- Si el campo es inválido (método del componente) -->
-      
-      <!-- span: elemento en línea (inline) -->
-      <!-- class="error": clase CSS para estilar el error -->
+
       <span class="error">
         {{ getErrorMessage('fullName') }}
-        <!-- {{ }}: interpolación (interpolation) -->
-        <!-- Llaves dobles muestran el valor de una expresión -->
-        <!-- getErrorMessage('fullName'): llama al método -->
-        <!-- El resultado se muestra en el HTML -->
       </span>
     }
-
-    <!-- ===== CAMPO: DNI / NIE ===== -->
     
     <label for="dni">DNI / NIE</label>
 
-    <!-- Vinculado a bookingForm.dni -->
     <input id="dni" type="text" formControlName="dni"
       [ngClass]="{
         'valid': bookingForm.get('dni')?.valid && bookingForm.get('dni')?.touched,
@@ -129,33 +46,23 @@
     @if (isFieldInvalid('dni')) {
       <span class="error">{{ getErrorMessage('dni') }}</span>
     }
-
-    <!-- ===== CAMPO: EMAIL (CON VALIDACIÓN ASÍNCRONA) ===== -->
     
     <label for="email">Email</label>
-    <!-- type="email": campo específico para emails -->
-    <!-- Tiene validación HTML5 básica -->
-    <!-- Vinculado a bookingForm.email -->
+
     <input id="email" type="email" formControlName="email" 
       [ngClass]="{
         'valid': bookingForm.get('email')?.valid && bookingForm.get('email')?.touched,
         'invalid': isFieldInvalid('email')
       }">
 
-    <!-- ===== MENSAJE DE VALIDACIÓN EN CURSO ===== -->
     @if (emailValidating) {
-      <!-- Si emailValidating es true (getter del componente) -->
       
       <span class="validating">Comprovant...</span>
-      <!-- Muestra "Comprobando..." mientras valida -->
     }
 
-    <!-- Mensaje de error si es inválido -->
     @if (isFieldInvalid('email')) {
       <span class="error">{{ getErrorMessage('email') }}</span>
     }
-
-    <!-- ===== CAMPO: TELÉFONO ===== -->
     
     <label for="phone">Telèfon</label>
 
@@ -173,10 +80,8 @@
       <span class="error">{{ getErrorMessage('phone') }}</span>
     }
 
-    <!-- ===== CAMPO: FECHA DE NACIMIENTO ===== -->
     
     <label for="birth">Data de Naixement</label>
-    <!-- type="date": selector de fecha HTML5 -->
     <input id="birth" type="date" formControlName="birthDate"
       [ngClass]="{
         'valid': bookingForm.get('birthDate')?.valid && bookingForm.get('birthDate')?.touched,
@@ -188,56 +93,32 @@
     }
 
   </section>
-  <!-- Fin sección datos del cliente -->
-
-  <!-- ============================================ -->
-  <!-- SECCIÓN: INFORMACIÓN DEL VIAJE -->
-  <!-- ============================================ -->
 
   <section>
 
     <h2>Informació del Viatge</h2>
-
-    <!-- ===== CAMPO: DESTINO (SELECT CON FILTRO) ===== -->
     
     <label>Destinació</label>
 
-    <!-- select: lista desplegable -->
-     <!-- Vinculado a bookingForm.destination -->
     <select formControlName="destination"
       [ngClass]="{
         'valid': bookingForm.get('destination')?.valid && bookingForm.get('destination')?.touched,
         'invalid': isFieldInvalid('destination')
       }">
       
-      <!-- option: opción dentro del select -->
-      <!-- value="": valor vacío (opción por defecto) -->
       <option value="">Selecciona una destinació</option>
 
-      <!-- ===== DIRECTIVA @for ===== -->
-      <!-- @for: bucle de Angular 17+ (antes *ngFor) -->
-      @for (d of filteredDestinations; track d) {
-        <!-- d: variable temporal para cada elemento -->
-        <!-- of filteredDestinations: recorre el array filteredDestinations -->
-        <!-- track d: clave de seguimiento (optimización de Angular) -->
-        
+      @for (d of filteredDestinations; track d) { 
         <option [value]="d">
-          <!-- [value]="d": property binding -->
-          <!-- El valor del option será el valor de d -->
-          
-          {{ d }}
-          <!-- Muestra el nombre del destino -->
+          {{ d }} <!-- muestra nombre destino -->
         </option>
       }
-      <!-- Se genera una <option> por cada destino filtrado -->
 
     </select>
 
     @if (isFieldInvalid('destination')) {
       <span class="error">{{ getErrorMessage('destination') }}</span>
     }
-
-    <!-- ===== CAMPO: FECHA DE SALIDA ===== -->
     
     <label>Data de Sortida</label>
 
@@ -254,8 +135,6 @@
       <span class="error">{{ getErrorMessage('departureDate') }}</span>
     }
 
-    <!-- ===== CAMPO: FECHA DE RETORNO ===== -->
-    
     <label>Data de Retorn</label>
 
     <input
@@ -271,21 +150,14 @@
       <span class="error">{{ getErrorMessage('returnDate') }}</span>
     }
 
-    <!-- ===== CAMPO: TIPO DE VIAJE (RADIO BUTTONS) ===== -->
     
     <label>Tipus de Viatge</label>
 
     <!-- div: contenedor genérico -->
     <div>
       
-      <!-- input type="radio": botón de opción -->
-      <!-- value: valor que se enviará si se selecciona esta opción -->
-      <!-- Ambos radio buttons comparten el mismo formControlName -->
-      <!-- Solo uno puede estar seleccionado a la vez -->
       <input type="radio" value="oneWay" formControlName="tripType">
       Només anada
-
-      <!-- Texto junto al radio button -->
 
       <input
         type="radio"
@@ -299,8 +171,6 @@
     @if (isFieldInvalid('tripType')) {
       <span class="error">{{ getErrorMessage('tripType') }}</span>
     }
-
-    <!-- ===== CAMPO: CLASE DE VIAJE ===== -->
     
     <label>Classe</label>
 
@@ -309,14 +179,9 @@
       [ngClass]="{
         'valid': bookingForm.get('travelClass')?.valid && bookingForm.get('travelClass')?.touched,
         'invalid': isFieldInvalid('travelClass')
-      }"
-    >
+      }">
       <option value="">Selecciona classe</option>
-      
-      <!-- Opciones fijas (sin directiva, HTML estático) -->
       <option>Turista</option>
-      <!-- Sin [value], el valor es el texto: "Turista" -->
-      
       <option>Business</option>
       <option>Primera classe</option>
     </select>
@@ -324,11 +189,8 @@
     @if (isFieldInvalid('travelClass')) {
       <span class="error">{{ getErrorMessage('travelClass') }}</span>
     }
-
-    <!-- ===== CAMPO: NÚMERO DE PASAJEROS ===== -->
     
     <label>Nombre de Passatgers</label>
-    <!-- type="number": campo numérico con flechas arriba/abajo -->
     <input
       type="number" formControlName="passengers"
       [ngClass]="{
@@ -341,56 +203,21 @@
     }
 
   </section>
-  <!-- Fin sección información del viaje -->
 
-  <!-- ============================================ -->
-  <!-- SECCIÓN: PASAJEROS ADICIONALES (FORMARRAY) -->
-  <!-- ============================================ -->
-
-  <!-- Solo se muestra si hay pasajeros adicionales -->
   @if (additionalPassengers.length > 0) {
-    <!-- additionalPassengers: getter que devuelve el FormArray -->
-    <!-- .length: número de elementos en el FormArray -->
-    <!-- > 0: si hay al menos 1 -->
-    
     <section>
       <h2>Passatgers Addicionals</h2>
 
-      <!-- ===== BUCLE @for SOBRE EL FORMARRAY ===== -->
       @for (passenger of additionalPassengersGroups; track $index) {
-        <!-- passenger: cada FormGroup del array -->
-        <!-- of additionalPassengersGroups: getter que devuelve FormGroup[] -->
-        <!-- track $index: usar el índice como clave de seguimiento -->
-        <!-- $index: variable especial que contiene el índice (0, 1, 2...) -->
-        
-        <!-- div con clase CSS -->
-        <!-- [formGroup]: vincula este div con el FormGroup específico -->
-        <!-- Crea un nuevo contexto de formulario -->
-        <!-- Los formControlName dentro accederán a este FormGroup -->
         <div class="passenger-group" [formGroup]="passenger">
           
           <h3>Passatger {{ $index + 2 }}</h3>
-          <!-- $index + 2 porque: -->
-          <!-- $index empieza en 0 -->
-          <!-- +1 para empezar en 1 -->
-          <!-- +1 más porque el pasajero 1 es el titular -->
-          <!-- Resultado: "Pasajero 2", "Pasajero 3", etc. -->
-
-          <!-- ===== CAMPO: NOMBRE DEL PASAJERO ===== -->
-          
           <label>Nom</label>
-          <!-- Busca 'name' dentro del FormGroup 'passenger' actual -->
-          <!-- No en bookingForm, sino en el FormGroup del contexto -->
           <input type="text"formControlName="name">
           
           @if (passenger.get('name')?.invalid && passenger.get('name')?.touched) {
-            <!-- passenger.get('name'): obtener el FormControl 'name' -->
-            <!-- del FormGroup actual -->
-            
             <span class="error">Nom obligatori (mínim 3 caràcters)</span>
           }
-
-          <!-- ===== CAMPO: EDAD DEL PASAJERO ===== -->
           
           <label>Edat</label>
           
@@ -402,8 +229,6 @@
           @if (passenger.get('age')?.invalid && passenger.get('age')?.touched) {
             <span class="error">Edat obligatòria (0-120)</span>
           }
-
-          <!-- ===== CAMPO: RELACIÓN CON EL TITULAR ===== -->
           
           <label>Relació amb el titular</label>
           
@@ -420,79 +245,39 @@
           }
 
         </div>
-        <!-- Fin del div de pasajero -->
       }
-      <!-- Fin del @for -->
 
     </section>
   }
-  <!-- Fin del @if -->
-
-  <!-- ============================================ -->
-  <!-- SECCIÓN: PRECIO TOTAL -->
-  <!-- ============================================ -->
-
-  <!-- Solo se muestra si el precio es mayor que 0 -->
   @if (totalPrice > 0) {
     <section>
       <h2>Preu Total</h2>
-      
-      <!-- p: párrafo -->
       <p class="total-price">
         {{ totalPrice }}€
-        <!-- Muestra el valor de totalPrice -->
-        <!-- €: símbolo del euro -->
       </p>
     </section>
   }
 
-  <!-- ============================================ -->
-  <!-- SECCIÓN: CONDICIONES -->
-  <!-- ============================================ -->
-
   <section>
 
     <h2>Condicions</h2>
-
-    <!-- ===== CHECKBOX: TÉRMINOS Y CONDICIONES ===== -->
-    
-    <!-- label sin 'for': el input está dentro, se vincula automáticamente -->
     <label>
-      <!-- type="checkbox": casilla de verificación -->
-      <!-- Vinculado a bookingForm.terms -->
-      <!-- Valor: true si marcado, false si desmarcado -->
       <input type="checkbox" formControlName="terms">
       Accepto termes i condicions
-      <!-- Texto del label -->
     </label>
 
     @if (isFieldInvalid('terms')) {
       <span class="error">{{ getErrorMessage('terms') }}</span>
     }
-
-    <!-- ===== CHECKBOX: NEWSLETTER (OPCIONAL) ===== -->
     
     <label>
-      <!-- Sin validadores, es opcional -->
       <input type="checkbox" formControlName="newsletter">
       Vull rebre newsletter
     </label>
 
   </section>
-
-  <!-- ============================================ -->
-  <!-- BOTÓN DE ENVÍO -->
-  <!-- ============================================ -->
-
-  <!-- button: botón HTML -->
-   <!-- type="submit": al hacer click, dispara el evento submit del form -->
-    <!-- [disabled]: property binding -->
-    <!-- disabled: atributo HTML que deshabilita el botón -->
-    <!-- !bookingForm.valid: negación de valid -->
-    <!-- Si el formulario NO es válido, el botón está deshabilitado -->
   <button type="submit" [disabled]="!bookingForm.valid">
     Enviar Reserva
   </button>
 
 </form>
-<!-- Fin del formulario -->
