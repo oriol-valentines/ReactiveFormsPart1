@@ -14,7 +14,7 @@
 
 </section>
 
-<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" >
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" > <!-- conecrta con el formgroup de .ts -->
 
   <section>
 
@@ -22,14 +22,15 @@
 
     <label for="name">Nom Complet</label>
 
+    <!-- validar nombre -->
     <input id="name" type="text" formControlName="fullName"
       [ngClass]="{
         'valid': bookingForm.get('fullName')?.valid && bookingForm.get('fullName')?.touched,
         'invalid': isFieldInvalid('fullName')
       }">
 
+  <!-- si es invalido -->
     @if (isFieldInvalid('fullName')) {
-
       <span class="error">
         {{ getErrorMessage('fullName') }}
       </span>
@@ -37,18 +38,21 @@
     
     <label for="dni">DNI / NIE</label>
 
+    <!-- validar DNI -->
     <input id="dni" type="text" formControlName="dni"
       [ngClass]="{
         'valid': bookingForm.get('dni')?.valid && bookingForm.get('dni')?.touched,
         'invalid': isFieldInvalid('dni')
       }">
 
+    <!-- SI ES INVALIDO -->
     @if (isFieldInvalid('dni')) {
       <span class="error">{{ getErrorMessage('dni') }}</span>
     }
     
     <label for="email">Email</label>
 
+    <!-- validar email -->
     <input id="email" type="email" formControlName="email" 
       [ngClass]="{
         'valid': bookingForm.get('email')?.valid && bookingForm.get('email')?.touched,
@@ -56,16 +60,17 @@
       }">
 
     @if (emailValidating) {
-      
       <span class="validating">Comprovant...</span>
     }
 
+    <!-- si no es valido -->
     @if (isFieldInvalid('email')) {
       <span class="error">{{ getErrorMessage('email') }}</span>
     }
     
     <label for="phone">Telèfon</label>
 
+    <!-- validar el telef -->
     <input
       id="phone"
       type="text"
@@ -76,18 +81,21 @@
       }"
     >
 
+    <!-- en cas de que no sigui valid -->
     @if (isFieldInvalid('phone')) {
       <span class="error">{{ getErrorMessage('phone') }}</span>
     }
 
     
     <label for="birth">Data de Naixement</label>
+    <!-- validar data de neixement -->
     <input id="birth" type="date" formControlName="birthDate"
       [ngClass]="{
         'valid': bookingForm.get('birthDate')?.valid && bookingForm.get('birthDate')?.touched,
         'invalid': isFieldInvalid('birthDate')
       }">
 
+<!-- si no es valid -->
     @if (isFieldInvalid('birthDate')) {
       <span class="error">{{ getErrorMessage('birthDate') }}</span>
     }
@@ -100,28 +108,28 @@
     
     <label>Destinació</label>
 
+    <!-- en cas de qie la destinació no sigui valida -->
     <select formControlName="destination"
       [ngClass]="{
         'valid': bookingForm.get('destination')?.valid && bookingForm.get('destination')?.touched,
         'invalid': isFieldInvalid('destination')
       }">
-      
       <option value="">Selecciona una destinació</option>
-
       @for (d of filteredDestinations; track d) { 
         <option [value]="d">
           {{ d }} <!-- muestra nombre destino -->
         </option>
       }
-
     </select>
 
+    <!-- si no es valido -->
     @if (isFieldInvalid('destination')) {
       <span class="error">{{ getErrorMessage('destination') }}</span>
     }
     
     <label>Data de Sortida</label>
 
+    <!-- data de sortida -->
     <input
       type="date"
       formControlName="departureDate"
@@ -131,12 +139,13 @@
       }"
     >
 
+    <!-- si no es valid -->
     @if (isFieldInvalid('departureDate')) {
       <span class="error">{{ getErrorMessage('departureDate') }}</span>
     }
 
     <label>Data de Retorn</label>
-
+    <!-- data retorn -->
     <input
       type="date"
       formControlName="returnDate"
@@ -145,49 +154,50 @@
         'invalid': isFieldInvalid('returnDate')
       }"
     >
-
+      <!-- si no es valido -->
     @if (isFieldInvalid('returnDate')) {
       <span class="error">{{ getErrorMessage('returnDate') }}</span>
     }
 
     
     <label>Tipus de Viatge</label>
+    <!-- tipo de viaje -->
     <div>
-      
       <input type="radio" value="oneWay" formControlName="tripType">
       Només anada
-
       <input
         type="radio"
         value="roundTrip"
         formControlName="tripType"
       >
       Anada i tornada
-
     </div>
-
+    <!-- si no es valido -->
     @if (isFieldInvalid('tripType')) {
       <span class="error">{{ getErrorMessage('tripType') }}</span>
     }
     
     <label>Classe</label>
-
+    <!-- selecionar clases -->
     <select
       formControlName="travelClass"
       [ngClass]="{
         'valid': bookingForm.get('travelClass')?.valid && bookingForm.get('travelClass')?.touched,
         'invalid': isFieldInvalid('travelClass')
       }">
+      <!-- opciones -->
       <option value="">Selecciona classe</option>
       <option>Turista</option>
       <option>Business</option>
       <option>Primera classe</option>
     </select>
 
+    <!-- si no es valido -->
     @if (isFieldInvalid('travelClass')) {
       <span class="error">{{ getErrorMessage('travelClass') }}</span>
     }
     
+    <!-- nombre de pasangers -->
     <label>Nombre de Passatgers</label>
     <input
       type="number" formControlName="passengers"
@@ -196,12 +206,13 @@
         'invalid': isFieldInvalid('passengers')
       }">
 
+      <!-- si no es valido -->
     @if (isFieldInvalid('passengers')) {
       <span class="error">{{ getErrorMessage('passengers') }}</span>
     }
 
+    <!-- para pasageros adicionales -->
   </section>
-
   @if (additionalPassengers.length > 0) {
     <section>
       <h2>Passatgers Addicionals</h2>
@@ -244,9 +255,10 @@
 
         </div>
       }
-
     </section>
   }
+
+  <!-- calcular precio -->
   @if (totalPrice > 0) {
     <section>
       <h2>Preu Total</h2>
@@ -257,23 +269,27 @@
   }
 
   <section>
-
     <h2>Condicions</h2>
+    <!-- ceckbox -->
     <label>
       <input type="checkbox" formControlName="terms">
       Accepto termes i condicions
     </label>
 
+    <!-- si el camp no es valid -->
     @if (isFieldInvalid('terms')) {
       <span class="error">{{ getErrorMessage('terms') }}</span>
     }
     
+    <!-- chekbox opcional -->
     <label>
       <input type="checkbox" formControlName="newsletter">
       Vull rebre newsletter
     </label>
 
   </section>
+
+  <!-- si pasa totes les validacions de bookingForm -->
   <button type="submit" [disabled]="!bookingForm.valid">
     Enviar Reserva
   </button>

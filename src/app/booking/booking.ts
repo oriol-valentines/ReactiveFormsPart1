@@ -1,8 +1,6 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray, AbstractControl, ValidatorFn, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 
@@ -13,6 +11,9 @@ import { delay, map } from 'rxjs/operators';
   styleUrl: './booking.css',
 })
 
+//FormControl: representa un solo formulario, es un input individual
+//FormGroup: Agrupa varios FormControl
+//FormArray: contiene una lista de controles, lista de datos que el usuario puede agregar o quitar datos
 
 export class Booking {
 
@@ -67,7 +68,7 @@ export class Booking {
     // Fecha de nacimiento (campo tipo date)
     birthDate: new FormControl(
       '',
-      Validators.required  // Solo un validador, no necesita array
+      [Validators.required, this.minAgeValidator(18)]
     ),
 
     destination: new FormControl('', Validators.required),
@@ -88,7 +89,7 @@ export class Booking {
 
     terms: new FormControl(//términos y condiciones
       false,  // valor inicial desmarcado
-      Validators.requiredTrue  //true paa ser vaslido
+      Validators.requiredTrue  //true para ser vaslido
     ),
     newsletter: new FormControl(false),  //no es required
     additionalPassengers: new FormArray([]) 
@@ -149,6 +150,11 @@ export class Booking {
 
     if (control.errors['pattern']) {
       return 'Format incorrecte';
+    }
+
+    if (control.errors['minAge']) { //validador edad
+      const req = control.errors['minAge'].requiredAge;
+      return `Has de tenir com a mínim ${req} anys`;
     }
 
     if (control.errors['emailExists']) { 
@@ -267,6 +273,27 @@ export class Booking {
           return exists ? { emailExists: true } : null; // si existe devolver err, si no valido 
         })
       );
+    };
+  }
+
+  minAgeValidator(requiredAge: number): ValidatorFn { //para validar la edad
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      const birth = new Date(value);
+      if (isNaN(birth.getTime())) {
+        return { minAge: { requiredAge, actualAge: null } };
+      }
+
+      const today = new Date();
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+
+      return age >= requiredAge ? null : { minAge: { requiredAge, actualAge: age } };
     };
   }
 
